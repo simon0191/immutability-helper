@@ -84,6 +84,12 @@ export class Context {
   }
   public update<T, C extends CustomCommands<object> = never>(
     object: T,
+    ...$specs: Spec<T, C>[],
+  ): T {
+      return $specs.reduce((currState, $spec) => this.updateSingle(currState, $spec), object)
+  }
+  private updateSingle<T, C extends CustomCommands<object> = never>(
+    object: T,
     $spec: Spec<T, C>,
   ): T {
     const spec = (typeof $spec === 'function') ? { $apply: $spec } : $spec;
